@@ -1,0 +1,108 @@
+class Set:
+    def __init__(self,s1,s2):
+        self.s1=s1
+        self.s2=s2
+
+    def accept(self):
+        n=int(input("Enter the numbr of element in set 1"))
+        for i in range (n):
+            e1=int(input("ENter the number = "))
+            self.s1.add(e1)
+            print(self.s1)
+        
+        m=int(input("Enter the number of set two "))
+        for i in range (m):
+            e2=int(input("ENter the number = "))
+            self.s2.add(e2)
+            print(self.s2)
+
+    def insert(self):
+        l=int(input("enter the number want to insert = "))
+        self.s1.add(l)
+        print(self.s1)
+    def delet(self):
+        l=int(input("Enter the number want to delete  "))
+        if l in self.s1:
+            self.s1.remove(l)
+            print(self.s1)
+        else:
+            print("Element not found")
+    def search(self):
+        m=int(input("Enter the number want to search ="))
+        if m in self.s1:
+            print("Element found")
+        else:
+            print("Element not found")
+
+    def size(self):
+        m=len(s1)
+        n=len(s2)
+        print("Size of 1st set is ",m)
+        print("size of second set ",n)
+    def inter(self,s2):
+        newset=set()
+        for e in  self.s1:
+            if e in self.s2:
+                newset.add(e)
+        print(newset)   
+
+    def difference(self,s2):
+        newset=set()
+        for e in  self.s1:
+            if e not in self.s2:
+                newset.add(e)
+        print(newset)
+
+    def union(self,s2):
+        newset=set()
+        newset=self.s1.copy()
+        for e in self.s2:
+            if e not in self.s1:
+                newset.add(e)
+        print(newset)
+    def subset(self,s2):
+        for e in self.s2:
+            if e in self.s1:
+                return(True)
+            else:
+                return (False)
+
+    def main():
+        while True:
+            
+            print("1.Accept\n2.insert\n3.Remove\n4.Size\n5.diffe")
+            print("6.Intersection\n7.union\n8Subset")
+            ch=int(input("ENter the choice = "))
+            if(ch==10):
+                quit()
+            elif(ch==1):
+                ob.accept()
+            elif(ch==2):
+                ob.insert()
+            elif(ch==3):
+                ob.delet()
+            elif(ch==4):
+                ob.size()
+            elif(ch==5):
+                ob.difference(s2)
+                ob.search()
+            elif(ch==6):
+                ob.inter()
+            elif(ch==7):
+                ob.union()
+            elif(ch==8):
+                if(ob.subset()):
+                    print("\nSet is a subset")
+                else:
+                    print("Set is not a subset")
+
+
+
+
+
+            
+
+s1=set()
+s2=set()
+ob=Set(s1,s2)
+Set.main()
