@@ -1,0 +1,172 @@
+#include<iostream>
+using namespace std;
+struct node
+{
+    int data;
+    node*left,*right;
+};
+node*insert(node*t,int x)
+{
+    if(t==NULL)
+    {
+        t=new node;
+        t->data=x;
+        t->left=NULL;
+        t->right=NULL;
+        return t;
+    }
+    else
+    {
+        if(x>t->data)
+        {
+            t->right=insert(t->right,x);
+            return t;
+        }
+        else
+        {
+            t->left=insert(t->left,x);
+            return t;
+        }
+    }
+
+}
+node*create()
+{
+    int n,x;
+    node*t;
+    t=NULL;
+    cout<<"\nENter the number of node want to insert in tree = ";
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        cout<<"\nENter the number = ";
+        cin>>x;
+        t=insert(t,x);
+    }
+    return t;
+}
+void display(node*t)
+{
+    if(t!=NULL)
+    {
+        display(t->left);
+        cout<<"->\t"<<t->data;
+        display(t->right);
+    }
+}
+node*minl(node*t)
+{
+    while(t->left!=NULL)
+    {
+        t=t->left;
+    }
+    return t;
+}
+node*max(node*t)
+{
+    while(t->right!=NULL)
+    {
+        t=t->right;
+    }
+    return t;
+}
+node*find(node*t,int x)
+{
+
+    node*p;
+    if(t==NULL)
+    {
+        return NULL;
+    }
+    if(t->data==x)
+    {
+        return t;
+    }
+    else
+    {
+        if(x>t->data)
+        {
+            return(find(t->right,x));
+        }
+        else
+        {
+            return(find(t->left,x));
+        }
+    }
+}
+
+node*swap(node*t)
+{
+    node*p;
+    if(t!=NULL)
+    {
+        p=t->left;
+        t->left=swap(t->right);
+        t->right=swap(p);
+    }
+    return t;
+}
+int height(node*t)
+{
+    int hl,hr;
+    if(t==NULL)
+        return 0;
+    if(t->left==NULL&&t->right==NULL)
+        return 0;
+    hl=height(t->left);
+    hr=height(t->right);
+    if(hl>hr)
+        return hl+1;
+    else    
+        return hr+1;
+}
+
+int main()
+{
+    node*t;
+    node*p;
+    p=NULL;
+    int m,h;
+    t=create();
+    display(t);
+    p=minl(t);
+    cout<<"\n\bMINUM element is = ";
+    cout<<p->data;
+    p=max(t);
+    cout<<"\nMaximum element is = "<<p->data;
+    cout<<"\nENter the number which want to find = ";
+    cin>>m;
+    p=find(t,m);
+    if(p==NULL)
+    {
+        cout<<"\nElement is not found";
+    }
+    else{
+        cout<<"\nElement is found ";
+        cout<<p->data;
+    }
+    h=height(t);
+    cout<<"\nHeight of the Tree is = ";
+    cout<<h;
+    p=swap(t);
+    cout<<"\n\n\nTree after the swaping ";
+    display(p);
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
