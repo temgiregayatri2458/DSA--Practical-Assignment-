@@ -1,0 +1,138 @@
+class hash:
+    def __init__(self,s):
+        self.f=[]
+        self.fd=[]
+        self.lh=[]
+        self.lh1=[]
+        self.dh=[]
+        self.dh1=[]
+        self.lp=0
+        self.d=0
+
+        for i in range(s):
+            self.f.append(0)
+            self.fd.append(0)
+            self.lh.append(None)
+            self.lh1.append(None)
+            self.dh.append(None)
+            self.dh1.append(None)
+
+        self.size=s
+
+    def linsert(self,num,nam):
+        loc=num%self.size
+        for i in range (self.size):
+            if(self.f[loc]==0):
+                self.f[loc]=1
+                self.lh[loc]=num
+                self.lh1[loc]=nam
+                return loc
+            loc=(loc+1)%self.size
+        return -1
+
+    def lsearch(self,num):
+        loc=num%self.size
+        x=-1
+        for i in range (self.size):
+            if(self.f[loc]==1 and self.lh[loc]==num):
+                x=loc
+                self.lp+=1
+            loc=(loc+1)%self.size
+        if(x!=-1):
+            print(" Number is found ")
+            print(num, " This number is foud at ", x," location")
+        else:
+            print(" Number is not found ")
+
+    def dinsert(self,num,nam):
+        loc=num%self.size
+        u=self.size-loc
+        for i in range (self.size):
+            loc=(loc+(u*i))%self.size
+            if(self.fd[loc]==0):
+                self.fd[loc]=1
+                self.dh[loc]=num
+                self.dh1[loc]=nam
+                return loc
+        return -1
+
+    def dsearch(self,num):
+        loc=num%self.size
+        u=self.size-loc
+        x=-1
+        for i in range (self.size):
+            loc=(loc+(u*i))%self.size
+            if(self.fd[loc]==1 and self.dh[loc]==num):
+                x=loc
+                self.d+=1
+        if(x!=-1):
+            print(" Number is found ")
+            pint( num," This number is found at ", x,"location")
+        else:
+            print(" This number is not found ")
+
+    def ldisplay(self):
+        for i in range(self.size):
+            if(self.f[i]==1):
+                print(self.lh[i],"\t",self.lh1[i])
+
+    def ddisplay(self):
+        for i in range(self.size):
+            if(self.fd[i]==1):
+                print(self.dh[i],"\t",self.dh1[i])
+    def create(self):
+        n=int(input("ENter the number of recor want to insert = "))
+        for i in range (n):
+            num=int(input("ENter the number = "))
+            nam=input("ENter the name = ")
+            x=ob.linsert(num,nam)
+            y=ob.dinsert(num,nam)
+            if(x==-1 or y==-1 ):
+                print(" Sorry !!! hash table is Full we can't insert")
+            else:
+                print(" Record inserted at ", x ," location in LP")
+                print("Record is insertted at ", y," location in Dp")
+
+    def main():
+        while True:
+            print(" 1.Add")
+            print(" 2. INsert ")
+            print(" 3. display")
+            print("4. Find ")
+            print("5.Exit")
+            ch=int(input("ENter the choice = "))
+            if(ch==5):
+                quit()
+            elif(ch==1):
+                ob.create()
+            elif(ch==2):
+                num=int(input("ENter the number = "))
+                nam=input("ENter the name = ")
+                x=ob.linsert(num,nam)
+                y=ob.dinsert(num,nam)
+                if(x==-1 or y==-1 ):
+                    print(" Sorry !!! hash table is Full we can't insert")
+                else:
+                    print(" Record inserted at ", x ," location in LP")
+                    print("Record is insertted at ", y," location in Dp")
+
+            elif(ch==3):
+                print("*****LP*****\n\n")
+                ob.ldisplay()
+                print("******DP*****\n\n")
+                ob.ddisplay()
+            elif(ch==4):
+                num=int(input("ENter the number want to find = "))
+                ob.lsearch(num)
+                ob.dsearch(num)
+            
+            else:
+                print("Wrong choice ")
+
+s=int(input("Enter the size of table = "))
+ob=hash(s)
+hash.main()
+
+
+
+            
