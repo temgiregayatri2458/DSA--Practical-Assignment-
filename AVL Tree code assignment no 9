@@ -1,0 +1,318 @@
+#include<iostream>
+using namespace std;
+struct node
+{
+    string key,mean;
+    node*left;
+    node*right;
+    int height;
+};
+class dict
+{
+    public:
+    int k=0;
+    node*insert(node*,string,string);
+    node*create();
+    node*LL(node*);
+    node*RR(node*);
+    node*LR(node*);
+    node*RL(node*);
+    int height(node*);
+    int balance(node*);
+    void display(node*);
+    node*find(node*,string);
+    void update(node*,string);
+    node*delet(node*,string);
+    node*min(node*);
+};
+node*dict::LL(node*t)
+{
+    node*temp;
+    temp=t->left;
+    t->left=temp->right;
+    temp->right=t;
+    t->height=height(t);
+    temp->height=height(temp);
+    cout<<"\nLL Rotation";
+    return temp;
+}
+node*dict::RR(node*t)
+{
+    node*temp;
+    temp=t->right;
+    t->right=temp->left;
+    temp->left=t;
+    t->height=height(t);
+    temp->height=height(temp);
+    cout<<"\nRR rotation";
+    return temp;
+}
+node*dict::LR(node*t)
+{
+    t->right=LL(t->right);
+    t=RR(t);
+    return t;
+}
+node*dict::RL(node*t)
+{
+    t->left=RR(t->left);
+    t=LL(t);
+    return t;
+}
+int dict::height(node*t)
+{
+    int hl,hr;
+    if(t==NULL)
+    {
+        return 0;
+    }
+    hl=height(t->left);
+    hr=height(t->right);
+    if(hl>hr)
+        return hl+1;
+    else
+        return hr+1;
+
+}
+int dict::balance(node*t)
+{
+    int hl,hr;
+    if(t==NULL)
+    return 0;
+    hl=height(t->left);
+    hr=height(t->right);
+    return(hl-hr);
+}
+node*dict::min(node*t)
+{
+    while(t->left!=NULL)
+    {
+        t=t->left;
+    }
+    return t;
+}
+node*dict::insert(node*t,string x,string y)
+{
+    int bal;
+    if(t==NULL)
+    {
+        t=new node;
+        t->key=x;
+        t->mean=y;
+        t->left=NULL;
+        t->right=NULL;
+        t->height=0;
+        return t;
+    }
+    else if(x>t->key)
+    {
+        t->right=insert(t->right,x,y);
+        bal=balance(t);
+        cout<<"\nBalance factor of "<<t->key<<" is "<<bal;
+        if(bal==-2)
+        {
+            if(x>t->key)
+            {
+                t=RR(t);
+            }
+            else
+                t=RL(t);
+        }
+        return t;
+    }
+    else
+    {
+        t->left=insert(t->left,x,y);
+        bal=balance(t);
+        cout<<"\nBalance factor of "<<t->key<<" is "<<bal;
+        if(bal==2)
+        {
+            if(x<t->key)
+            {
+                t=LL(t);
+            }
+            else
+                t=LR(t);
+        }
+        return t;
+    }
+}
+node*dict::create()
+{
+    node*p;
+    int n;
+    string x,y;
+    cout<<"\nENter the number of words = ";
+    cin>>n;
+    p=NULL;
+    for(int i=0;i<n;i++)
+    {
+        cout<<"\nENter the word = ";
+        cin>>x;
+        cout<<"\nENter the meaning = ";
+        cin>>y;
+        p=insert(p,x,y);
+
+    }
+    return p;
+}
+void dict::display(node*t)
+{
+    if(t!=NULL)
+    {
+        display(t->left);
+        cout<<"\n Word ---->  "<<t->key<<"\t meaning ----->  "<<t->mean;
+        display(t->right);
+    }
+}
+void dict::update(node*t,string x)
+{
+    if(t==NULL)
+    {
+        cout<<"\nData not found";
+    }
+    else if(x==t->key)
+    {
+        cout<<"\nEnter the meaning = ";
+        cin>>t->mean;
+    }
+    else if(x>t->key)
+    {
+        update(t->right,x);
+    }
+    else
+    {
+        update(t->left,x);
+    }
+}
+node*dict::find(node*t,string x)
+{
+    if(t==NULL)
+    {
+        return NULL;
+    }
+    else if(x==t->key)
+    {
+        k++;
+        return t;
+    }
+    else if(x>t->key)
+    {
+        k++;
+        return(find(t->right,x));
+    }
+    else
+    {
+        k++;
+        return(find(t->left,x));
+    }
+}
+node*dict::delet(node*t,string x)
+{
+    int bal;
+    node*temp;
+    if(t==NULL)
+    {
+        return NULL;
+    }
+    else if(x>t->key)
+    {
+        t->right=delet(t->right,x);
+        bal=balance(t);
+        if(bal>1)
+        {
+            if(balance(t->left)>=0)
+            {
+                t=LL(t);
+            }
+            else
+                t=LR(t);
+        }
+        return t;
+    }
+    else if(x<t->key)
+    {
+        t->left=delet(t->left,x);
+        bal=balance(t);
+        if(bal<-1)
+        {
+            if(balance(t->left)<=0)
+            {
+                t=RR(t);
+            }
+            else
+                t=RL(t);
+        }
+        return t;
+    }
+    else{
+        if(t->left==NULL&&t->right==NULL)
+        {
+            temp=t;
+            delete(temp);
+            return NULL;
+        }
+        else if(t->left==NULL)
+        {
+            temp=t;
+            t=t->right;
+            delete(temp);
+            return t;
+        }
+        else if(t->right==NULL)
+        {
+            temp=t;
+            t=t->left;
+            delete(temp);
+            return t;
+        }
+        else
+        {
+            temp=min(t->right);
+            t->key=temp->key;
+            t->right=delet(t->right,temp->key);
+            bal=balance(t);
+            if(bal>1)
+            {
+                if(balance(t->left)>=0)
+                {
+                    t=LL(t);
+                }
+                else
+                    t=LR(t);
+            }
+            return t;
+        }
+    }
+}
+int main()
+{
+    node*t,*p;
+    t=NULL;
+    dict d;
+    t=d.create();
+    cout<<"\nDictionary\n";
+    d.display(t);
+    string s;
+    cout<<"\nENter the string want to update = ";
+    cin>>s;
+    d.update(t,s);
+    d.display(t);
+    cout<<"\nENter the string want to find = ";
+    cin>>s;
+    p=d.find(t,s);
+    cout<<"\nNumber of comparasion required = "<<d.k;
+    if(p!=NULL)
+    {
+        cout<<"\nData found ";
+    }
+    else{
+        cout<<"\nData not found ";
+    }
+    cout<<"\nEnter the word want to delete = ";
+    cin>>s;
+    t=d.delet(t,s);
+    cout<<"\nData After deletion \n";
+    d.display(t);
+    return 0;
+}
