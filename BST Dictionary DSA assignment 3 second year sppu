@@ -1,0 +1,219 @@
+#include<iostream>
+using namespace std;
+typedef struct node
+{
+	string key, data;
+	node*left,*right;
+}node;
+node*insert(node*t,string x,string y)
+{
+	node*p;
+	if(t==NULL)
+	{
+		t=new node;
+		t->key=x;
+		t->data=y;
+		t->left=NULL;
+		t->right=NULL;
+		return t;
+	}
+	if(x>t->data)
+	{
+		t->right=insert(t->right,x,y);
+		return t;
+		
+	}
+	else
+	{
+		t->left=insert(t->left,x,y);
+		return t;
+	}
+}
+
+node*create()
+{
+	node*t;
+	t=NULL;
+	int n;
+	string x,y;
+	cout<<"\nEnter the number of nodes want to insert = ";
+	cin>>n;
+	for(int i=0;i<n;i++)
+	{
+		cout<<"\nENter the word  = ";
+		cin>>x;
+		cout<<"\nENter the meaning of word = ";
+		cin>>y;
+		t=insert(t,x,y);
+	}
+	return t;
+}
+void inorder(node*t)
+{
+	if(t!=NULL)
+	{
+		inorder(t->left);
+		cout<<"\t"<<t->key<<"\t"<<t->data;
+		inorder(t->right);
+	}
+}
+void postor(node*t)
+{
+	if(t!=NULL)
+	{
+		postor(t->right);
+		cout<<"\t"<<t->key<<"\t"<<t->data;
+		postor(t->left);
+	}
+}
+node*min(node*t)
+{
+	while(t!=NULL)
+		t=t->left;
+	return t;
+}
+node*find(node*t,string x)
+{
+	if(t==NULL)
+	{
+		return NULL;
+	}
+		
+	else
+	{
+		if(t->key==x)
+			return t;
+		else
+		{
+			if(x>t->key)
+				return(find(t->right,x));
+			else
+			{
+				if(x<t->key)
+					return(find(t->left,x));
+				else
+				{
+					cout<<"\nData not found ";
+					return NULL;
+				}
+					
+			}
+		}
+		
+	}
+	
+}
+void comparasion(node*t,string x)
+{
+	int k=0;
+	if(t==NULL)
+		cout<<"\n0 comparasion are require ";
+	if(x>t->key)
+	{
+		k++;
+		t->right;
+		
+	}
+	if(x<t->data)
+	{
+		k++;
+		t->left;
+	}
+	if(x==t->key)
+	{
+		k++;
+		cout<<"\n Number of comparasion required are = ";
+		cout<<k;
+		
+	}
+	cout<<"\nNo data found";
+}
+
+
+
+node*update(node*t,string x)
+{
+	string y;
+	node*m;
+	m=find(t,x);
+	cout<<"\nEnter the meaning of the word which want to update = ";
+	cin>>m->data;
+	return t;
+}
+node*delet(node*t,string x)
+{
+	node*temp,*p,*q;
+	if(t==NULL)
+	{
+		return NULL;
+	}
+	if((t->key)>x)
+	{
+		t->right=delet(t->right,x);
+		return t;
+	}
+	if((t->key)<x)
+	{
+		t->left=delet(t->left,x);
+		return t;
+	}
+	if((t->left==NULL)&&(t->right)==NULL)
+	{
+		temp=t;
+		delete(temp);
+		return NULL;
+	}
+	if(t->left==NULL)
+	{
+		temp=t;
+		t=t->right;
+		delete(temp);
+		return t;
+	}
+	if(t->right==NULL)
+	{
+		temp=t;
+		t=t->left;
+		delete(temp);
+		return t;
+	}
+	temp=min(t);
+	t->key=temp->key;
+	t->data=temp->data;
+	t->right=delet(t->right,temp->key);
+	return t;
+}
+
+
+
+int main()
+{
+	node*t,*q;
+	string x,y;
+	t=create();
+	cout<<"\n\nCreated Tree";
+	inorder(t);
+	cout<<"\n\nTree in descending order ";
+	
+	postor(t);
+	cout<<"\nEnter data which want to update = ";
+	cin>>x;
+	cout<<"\n\n";
+	t=update(t,x);
+	inorder(t);
+	cout<<"\nEnter the key and data which want to insert = ";
+	cin>>x>>y;
+	cout<<"\n\n";
+	t=insert(t,x,y);
+	inorder(t);
+	cout<<"\nEnter the data want to delete =";
+	cin>>x;
+	delet(t,x);
+	cout<<"\n\n";
+	inorder(t);
+	cout<<"\nEnter the data which comparasion want to find = ";
+	cin>>x;
+	comparasion(t,x);
+	
+	return 0;
+}
